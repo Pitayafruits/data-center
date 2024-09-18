@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: collect
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+mybatis-plus:
+  mapper-locations: classpath*:com/cc/infra/repository/mapper/xml/*.xml
+  global-config:
+    db-config:
+      logic-delete-field: status
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.cc.infra.repository.entity
+
