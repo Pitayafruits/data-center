@@ -1,26 +1,21 @@
-package com.cc.infra.repository.entity;
+package com.cc.business.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
-
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.cc.model.collect.enums.CollectWayEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import java.io.Serializable;
+
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author cc
- * @since 2024-09-09
+ * 组织实体.
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("tb_organ")
-public class TbOrgan implements Serializable {
+public class Organ implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,7 +35,7 @@ public class TbOrgan implements Serializable {
      * 抽取组织方式？1：sql抽取 2：接口抽取
      */
     @TableField("collect_way")
-    private Integer collectWay;
+    private CollectWayEnum collectWay;
 
     /**
      * 根据抽取组织方式分别表示sql脚本或url
@@ -54,23 +49,6 @@ public class TbOrgan implements Serializable {
     @TableField("data_source")
     private String dataSource;
 
-    /**
-     * 创建时间
-     */
-    @TableField(value = "gmt_create", fill = FieldFill.INSERT)
-    private LocalDateTime gmtCreate;
-
-    /**
-     * 更新时间
-     */
-    @TableField(value = "gmt_modified", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime gmtModified;
-
-    /**
-     * 状态？0：删除 1：未删除
-     */
-    @TableField("status")
-    private Integer status;
 
 
 }
