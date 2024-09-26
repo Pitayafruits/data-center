@@ -1,15 +1,22 @@
 package com.cc.business.domain;
 
 
+import com.cc.model.collect.enums.DataTypeEnum;
 import com.cc.model.collect.enums.SourceTypeEnum;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.Date;
+import java.util.Objects;
 
 
 /**
  * 元数据模型.
  */
 @Data
+@Slf4j
 public class Metadata implements Serializable {
 
 
@@ -56,7 +63,7 @@ public class Metadata implements Serializable {
     /**
      * 指标数据类型
      */
-    private String dataType;
+    private DataTypeEnum dataType;
 
     /**
      * 指标类型？1：抽取类型 2：计算类型
@@ -97,5 +104,23 @@ public class Metadata implements Serializable {
      * 基准值，用来做展示数据
      */
     private Integer baseValue;
+
+    public Object getDefaultValue() {
+        Object result = null;
+        try {
+            if (Objects.isNull(dataType)) {
+                return result;
+            }
+            if (Objects.equals(dataType, DataTypeEnum.DATE) || Objects.equals(dataType, DataTypeEnum.TIMESTAMP)) {
+                return new Date();
+            }
+            Class<?> javaType = dataType.getJavaType();
+            result = javaType.getDeclaredConstructor(String.class)
+                    .newInstance(dataType.getDbDefaultValue());
+        } catch (Exception e) {
+            log.error("getDefaultValue error, e = ", e);
+        }
+        return result;
+    }
 
 }
