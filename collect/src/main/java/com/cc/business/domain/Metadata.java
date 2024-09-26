@@ -1,62 +1,59 @@
 package com.cc.business.domain;
 
-
-import com.cc.model.collect.enums.DataTypeEnum;
-import com.cc.model.collect.enums.SourceTypeEnum;
+import com.cc.model.collect.enums.DataTypeEnum ;
+import com.cc.model.collect.enums.SourceTypeEnum ;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Objects;
-
 
 /**
  * 元数据模型.
  */
-@Data
 @Slf4j
+@Data
 public class Metadata implements Serializable {
 
+    private static final long serialVersionUID = 1L;
 
     /**
-     * 主键id
+     * 主键id.
      */
     private Long id;
 
     /**
-     * 规则id
+     * 规则表主键id
      */
     private Long ruleId;
 
     /**
-     * 指标英文名称
+     * 指标英文标识
      */
     private String enName;
 
     /**
-     * 指标中文名称
+     * 指标中文标识
      */
     private String cnName;
 
     /**
-     * 默认展示？0：否 1：是
+     * 指标默认是否展示
      */
     private Boolean defaultShow;
 
     /**
-     * 是否存储当前指标？0：否 1：是
+     * 是否存储当前指标
      */
     private Boolean storage;
 
     /**
-     * 当前指标是否和维度有关？0：否 1：是
+     * 当前指标是否和维度有关
      */
     private Boolean dimension;
 
     /**
-     * 当前指标是否和统计周期有关？0：否  1：是
+     * 当前指标是否和统计周期有关
      */
     private Boolean period;
 
@@ -66,7 +63,7 @@ public class Metadata implements Serializable {
     private DataTypeEnum dataType;
 
     /**
-     * 指标类型？1：抽取类型 2：计算类型
+     * 指标类型：1抽取类型 2计算类型
      */
     private SourceTypeEnum sourceType;
 
@@ -105,6 +102,7 @@ public class Metadata implements Serializable {
      */
     private Integer baseValue;
 
+
     public Object getDefaultValue() {
         Object result = null;
         try {
@@ -115,12 +113,34 @@ public class Metadata implements Serializable {
                 return new Date();
             }
             Class<?> javaType = dataType.getJavaType();
-            result = javaType.getDeclaredConstructor(String.class)
-                    .newInstance(dataType.getDbDefaultValue());
+            result = javaType.getDeclaredConstructor(String.class).newInstance(dataType.getDbDefaultValue());
         } catch (Exception e) {
-            log.error("getDefaultValue error, e = ", e);
+            log.error("getDefaultValue err, e=", e);
         }
         return result;
     }
 
+    public boolean periodAndDimension() {
+        return isPeriod() && isDimension();
+    }
+
+    public boolean periodAndNotDimension() {
+        return isPeriod() && !isDimension();
+    }
+
+    public boolean notPeriodAndDimension() {
+        return !isPeriod() && isDimension();
+    }
+
+    public boolean notPeriodAndNotDimension() {
+        return !isPeriod() && !isDimension();
+    }
+
+    public boolean isPeriod() {
+        return Objects.isNull(period) ? false : period;
+    }
+
+    public boolean isDimension() {
+        return Objects.isNull(dimension) ? false : dimension;
+    }
 }
